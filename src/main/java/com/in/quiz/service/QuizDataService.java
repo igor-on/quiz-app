@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @Service
 @Log
@@ -15,9 +16,10 @@ public class QuizDataService {
 
     RestTemplate restTemplate = new RestTemplate();
 
-    public void getQuizCategories() {
+    public List<CategoriesDTO.CategoryDTO> getQuizCategories() {
         CategoriesDTO result = restTemplate.getForObject("https://opentdb.com/api_category.php", CategoriesDTO.class);
         log.info("Quiz categories: " + result.getCategories());
+        return result.getCategories();
     }
 
     public void getQuizQuestions() {
