@@ -6,6 +6,7 @@ import com.in.quiz.frontend.GameOptions;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.annotation.SessionScope;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@SessionScope
 @RequiredArgsConstructor
 @Log
 public class OnGoingGameService {
