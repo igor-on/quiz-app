@@ -31,7 +31,7 @@ public class FrontendController {
     }
 
     @PostMapping("/select")
-    public String postFormSelect(Model model, @ModelAttribute GameOptions gameOptions) {
+    public String postSelectForm(Model model, @ModelAttribute GameOptions gameOptions) {
       log.info("Form submitted with data: " + gameOptions);
       onGoingGameService.init(gameOptions);
       return "redirect:game";
@@ -49,13 +49,22 @@ public class FrontendController {
     }
 
     @PostMapping("/game")
-    public String postSelectForm(Model model, @ModelAttribute UserAnswer userAnswer) {
+    public String postGameForm(Model model, @ModelAttribute UserAnswer userAnswer) {
         onGoingGameService.checkAnswerForCurrentQuestionAndUpdatePoints(userAnswer.getAnswer());
         boolean hasNextQuestion = onGoingGameService.proceedToNextQuestion();
         if (hasNextQuestion) {
             return "redirect:game";
         } else {
-            return "redirect:";
+            return "redirect:summary";
         }
+    }
+
+    @GetMapping("/summary")
+    public String summary(Model model) {
+        model.addAttribute("difficulty", onGoingGameService.getDifficulty());
+        model.addAttribute("categoryName", onGoingGameService.getCategoryName());
+        model.addAttribute("points", onGoingGameService.getPoints());
+        model.addAttribute("maxPoints", onGoingGameService.getTotalQuestionsNumber());
+        return "summary";
     }
 }
