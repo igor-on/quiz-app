@@ -10,6 +10,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Locale;
 
 @Service
 @Log
@@ -27,7 +28,7 @@ public class QuizDataService {
         URI uri = UriComponentsBuilder.fromHttpUrl("https://opentdb.com/api.php")
                 .queryParam("amount", gameOptions.getNumberOfQuestions())
                 .queryParam("category", gameOptions.getCategoryId())
-                .queryParam("difficulty", gameOptions.getDifficulty())
+                .queryParam("difficulty", gameOptions.getDifficulty().name().toLowerCase(Locale.ROOT))
                 .build().toUri();
         log.info("Quiz question retrieve URL: " + uri);
 
