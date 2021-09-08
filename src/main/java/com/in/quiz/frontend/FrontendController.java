@@ -31,7 +31,7 @@ public class FrontendController {
     }
 
     @PostMapping("/select")
-    public String postSelectForm(Model model, @ModelAttribute GameOptions gameOptions) {
+    public String postSelectForm(@ModelAttribute GameOptions gameOptions) {
       log.info("Form submitted with data: " + gameOptions);
       onGoingGameService.init(gameOptions);
       return "redirect:game";
@@ -49,7 +49,8 @@ public class FrontendController {
     }
 
     @PostMapping("/game")
-    public String postGameForm(Model model, @ModelAttribute UserAnswer userAnswer) {
+    public String postGameForm(@ModelAttribute UserAnswer userAnswer) {
+        log.info("User answer submitted with data: " + userAnswer);
         onGoingGameService.checkAnswerForCurrentQuestionAndUpdatePoints(userAnswer.getAnswer());
         boolean hasNextQuestion = onGoingGameService.proceedToNextQuestion();
         if (hasNextQuestion) {
