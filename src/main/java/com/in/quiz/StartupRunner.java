@@ -18,6 +18,6 @@ public class StartupRunner implements CommandLineRunner {
     log.info("Exceuting startup actions...");
 
     quizDataService.getQuizCategories();
-    quizDataService.getQuizQuestions();
+//    quizDataService.getQuizQuestions();
     }
 }
