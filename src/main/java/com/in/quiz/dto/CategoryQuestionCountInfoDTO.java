@@ -2,6 +2,7 @@ package com.in.quiz.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.in.quiz.frontend.Difficulty;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,7 +15,12 @@ public class CategoryQuestionCountInfoDTO {
     private int categoryId;
     private CategoryQuestionCountInfo categoryQuestionCountInfo;
 
+    public CategoryQuestionCountInfoDTO(int easy, int medium, int hard) {
+     categoryQuestionCountInfo = new CategoryQuestionCountInfo(easy+medium+hard, easy, medium, hard);
+    }
+
     @NoArgsConstructor
+    @AllArgsConstructor
     @Getter
     @ToString
     public static class CategoryQuestionCountInfo {

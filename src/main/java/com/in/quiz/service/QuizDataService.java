@@ -11,8 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 
 @Service
 @Log
@@ -50,5 +49,23 @@ public class QuizDataService {
         QuestionsDTO result = restTemplate.getForObject(uri, QuestionsDTO.class);
         log.info("Quiz questions: Open Trivia DB response code = " + result.getResponseCode() + ". Content: " + result.getResults());
         return result.getResults();
+    }
+
+    static Map<Difficulty, Integer> calculateEachDifficultyQuestionCount(int numberOfQuestion, Difficulty difficulty, CategoryQuestionCountInfoDTO categoryQuestionCount) {
+        Map<Difficulty, Integer> eachDifficultyQuestionCount = new EnumMap<>(Difficulty.class);
+        eachDifficultyQuestionCount.put(difficulty, Math.min(numberOfQuestion, categoryQuestionCount.getQuestionCountForDifficulty(difficulty)));
+
+        int missingQuestions = numberOfQuestion - eachDifficultyQuestionCount.values().stream().reduce(0, Integer::sum);
+        while(missingQuestions > 0) {
+            Difficulty closestDifficulty = Difficulty.calculateNextDifficulty(eachDifficultyQuestionCount.keySet());
+            if(closestDifficulty == null) {
+                log.warning("Not enough question in given category");
+                break;
+            }
+            eachDifficultyQuestionCount.put(closestDifficulty,Math.min(missingQuestions, categoryQuestionCount.getQuestionCountForDifficulty(closestDifficulty)));
+
+            missingQuestions = numberOfQuestion - eachDifficultyQuestionCount.values().stream().reduce(0, Integer::sum);
+        }
+        return eachDifficultyQuestionCount;
     }
 }
