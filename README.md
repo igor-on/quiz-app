@@ -1,6 +1,6 @@
 # Quiz App
 
-Check your knowledge!
+### Check your knowledge!
 
 ## TABLE OF CONTENTS
 
@@ -36,7 +36,7 @@ Check your knowledge!
 ## How to start
 
 
-* Run command line type following command:
+* Run command line and type following commands:
 
 1.`
 git clone https://github.com/igor-on/quiz-app.git && cd quiz-app
