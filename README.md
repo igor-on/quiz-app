@@ -6,8 +6,8 @@
 
 * [About this quiz](#about-this-quiz)
 * [Screenshots from app](#screenshots-from-app)
-* [How to start](#how-to-start)
 * [Technologies](#technologies)
+* [How to start](#how-to-start)
 
 ## About this quiz
 
