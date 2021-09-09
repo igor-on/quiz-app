@@ -17,7 +17,7 @@ public class CategoryQuestionCountInfoDTO {
     private CategoryQuestionCountInfo categoryQuestionCountInfo;
 
     public CategoryQuestionCountInfoDTO(int easy, int medium, int hard) {
-     categoryQuestionCountInfo = new CategoryQuestionCountInfo(easy+medium+hard, easy, medium, hard);
+        categoryQuestionCountInfo = new CategoryQuestionCountInfo(easy + medium + hard, easy, medium, hard);
     }
 
     @NoArgsConstructor

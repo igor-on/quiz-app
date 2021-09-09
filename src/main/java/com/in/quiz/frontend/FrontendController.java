@@ -32,9 +32,9 @@ public class FrontendController {
 
     @PostMapping("/select")
     public String postSelectForm(@ModelAttribute GameOptions gameOptions) {
-      log.info("Form submitted with data: " + gameOptions);
-      onGoingGameService.init(gameOptions);
-      return "redirect:game";
+        log.info("Form submitted with data: " + gameOptions);
+        onGoingGameService.init(gameOptions);
+        return "redirect:game";
     }
 
     @GetMapping("/game")

@@ -26,11 +26,11 @@ public class OnGoingGameService {
     private final QuizDataService quizDataService;
 
     public void init(GameOptions gameOptions) {
-            this.gameOptions = gameOptions;
-            this.currentQuestionIndex = 0;
-            this.points = 0;
+        this.gameOptions = gameOptions;
+        this.currentQuestionIndex = 0;
+        this.points = 0;
 
-           this.questions = quizDataService.getQuizQuestions(this.gameOptions);
+        this.questions = quizDataService.getQuizQuestions(this.gameOptions);
     }
 
     public Difficulty getDifficulty() {
@@ -77,7 +77,7 @@ public class OnGoingGameService {
         QuestionsDTO.QuestionDTO dto = questions.get(currentQuestionIndex);
 
         boolean correct = dto.getCorrectAnswer().equals(userAnswer);
-        if(correct) {
+        if (correct) {
             points++;
         }
         return correct;
