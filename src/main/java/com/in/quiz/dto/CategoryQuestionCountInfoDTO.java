@@ -13,6 +13,7 @@ public class CategoryQuestionCountInfoDTO {
 
     @JsonProperty("category_id")
     private int categoryId;
+    @JsonProperty("category_question_count")
     private CategoryQuestionCountInfo categoryQuestionCountInfo;
 
     public CategoryQuestionCountInfoDTO(int easy, int medium, int hard) {

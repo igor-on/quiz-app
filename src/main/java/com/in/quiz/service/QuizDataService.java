@@ -36,10 +36,27 @@ public class QuizDataService {
     }
 
     public List<QuestionsDTO.QuestionDTO> getQuizQuestions(GameOptions gameOptions) {
-        return getQuizQuestions(gameOptions.getNumberOfQuestions(), gameOptions.getCategoryId(), gameOptions.getDifficulty());
+        CategoryQuestionCountInfoDTO categoryQuestionCount = getCategoryQuestionCount(gameOptions.getCategoryId());
+        log.info(categoryQuestionCount.toString());
+        int availableQuestionCount = categoryQuestionCount.getQuestionCountForDifficulty(gameOptions.getDifficulty());
+        if (availableQuestionCount >= gameOptions.getNumberOfQuestions()) {
+            return getQuizQuestions(gameOptions.getNumberOfQuestions(), gameOptions.getCategoryId(), gameOptions.getDifficulty());
+        } else {
+            List<QuestionsDTO.QuestionDTO> questions = new ArrayList<>();
+            Map<Difficulty, Integer> difficultyIntegerMap = calculateEachDifficultyQuestionCount(gameOptions.getNumberOfQuestions(), gameOptions.getDifficulty(), categoryQuestionCount);
+            for (Map.Entry<Difficulty, Integer> entry : difficultyIntegerMap.entrySet()) {
+                List<QuestionsDTO.QuestionDTO> originalDifficultyQuestions = getQuizQuestions(entry.getValue(), gameOptions.getCategoryId(), entry.getKey());
+                questions.addAll(originalDifficultyQuestions);
+            }
+            Collections.shuffle(questions);
+            return questions;
+        }
     }
 
     private List<QuestionsDTO.QuestionDTO> getQuizQuestions(int numberOfQuestions, int categoryId, Difficulty difficulty) {
+        if (numberOfQuestions <= 0) {
+            return Collections.emptyList();
+        }
         URI uri = UriComponentsBuilder.fromHttpUrl("https://opentdb.com/api.php")
                 .queryParam("amount", numberOfQuestions)
                 .queryParam("category", categoryId)
@@ -56,13 +73,13 @@ public class QuizDataService {
         eachDifficultyQuestionCount.put(difficulty, Math.min(numberOfQuestion, categoryQuestionCount.getQuestionCountForDifficulty(difficulty)));
 
         int missingQuestions = numberOfQuestion - eachDifficultyQuestionCount.values().stream().reduce(0, Integer::sum);
-        while(missingQuestions > 0) {
+        while (missingQuestions > 0) {
             Difficulty closestDifficulty = Difficulty.calculateNextDifficulty(eachDifficultyQuestionCount.keySet());
-            if(closestDifficulty == null) {
+            if (closestDifficulty == null) {
                 log.warning("Not enough question in given category");
                 break;
             }
-            eachDifficultyQuestionCount.put(closestDifficulty,Math.min(missingQuestions, categoryQuestionCount.getQuestionCountForDifficulty(closestDifficulty)));
+            eachDifficultyQuestionCount.put(closestDifficulty, Math.min(missingQuestions, categoryQuestionCount.getQuestionCountForDifficulty(closestDifficulty)));
 
             missingQuestions = numberOfQuestion - eachDifficultyQuestionCount.values().stream().reduce(0, Integer::sum);
         }
